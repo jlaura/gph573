@@ -1,0 +1,56 @@
+New Iteration
+=============
+    Coordinates
+    -----------
+    (356, 541)
+    (568, 503)
+    (309, 505)
+    (480, 126)
+
+    Distances
+    ---------
+    The two points closest are [(309, 505), (356, 541)].
+    They are separated by 59.203040 units.
+
+New Iteration
+=============
+    Coordinates
+    -----------
+    (998, 760)
+    (227, 631)
+    (437, 199)
+    (4, 897)
+
+    Distances
+    ---------
+    The two points closest are [(4, 897), (227, 631)].
+    They are separated by 347.109493 units.
+
+New Iteration
+=============
+    Coordinates
+    -----------
+    (703, 106)
+    (342, 74)
+    (334, 508)
+    (383, 708)
+
+    Distances
+    ---------
+    The two points closest are [(383, 708), (334, 508)].
+    They are separated by 205.915031 units.
+
+New Iteration
+=============
+    Coordinates
+    -----------
+    (574, 309)
+    (178, 820)
+    (737, 771)
+    (951, 580)
+
+    Distances
+    ---------
+    The two points closest are [(737, 771), (951, 580)].
+    They are separated by 286.839676 units.
+
