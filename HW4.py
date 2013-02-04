@@ -61,6 +61,7 @@ points = []
 for x in range(10):
     point = Point()
     point.generatePCS()
+    
     points.append((point.coord[0],point.coord[1]))
 
 pointcounter = 1
@@ -93,6 +94,10 @@ for point in points:
             within_list.append("r"+str(rectanglecounter))
         rectanglecounter += 1 #Increment the key counter
     if len(within_list) > 0:
+        l = []
+        for x in within_list:
+            l.append(x)
+        within_list = ", ".join(l)
         line = "p{} is within {} \n".format(pointcounter, within_list)
         outputds.write(line)   
     pointcounter += 1
