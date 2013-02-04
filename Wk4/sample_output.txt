@@ -1,0 +1,22 @@
+The list of points are: 
+p1: (192, 53) 
+p2: (170, 180) 
+p3: (93, 68) 
+p4: (74, 40) 
+p5: (155, 0) 
+p6: (54, 42) 
+p7: (133, 95) 
+p8: (183, 83) 
+p9: (32, 61) 
+p10: (111, 149) 
+
+The list of rectangles are:
+r1: [(183, 115), (183, 89), (139, 89), (139, 115)] 
+r2: [(122, 125), (122, 68), (22, 68), (22, 125)] 
+r3: [(181, 11), (181, 85), (68, 85), (68, 11)] 
+r4: [(44, 86), (44, 35), (114, 35), (114, 86)] 
+
+The spatial relationship between the points and the rectangles are
+p3 is within r3, r4 
+p4 is within r3, r4 
+p6 is within r4 

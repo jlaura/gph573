@@ -1,0 +1,40 @@
+\documentclass[11pt, oneside]{amsart}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+
+\title{Homework 3 - Point, Polyline, and Polygon Data Structures}
+\author{Jay Laura}
+\date{}
+\begin{document}
+\maketitle{\emph{Geometry Data Structures}}
+
+Features, representing buildings, rivers, or cities for example, can be reified into polygon, polyline, and points in a GISystem.  The representation of these objects in a data structure suitable for computer storage, interpretation, and processing must be standardized to facilitate robust data access.  The following is a proposed data structure and class implementation schema to provide a means of robust retrieval using Python.  The building block of all geometries is the point.  I suggest that the point be stored as a tuple, \textit{(x,y)}.  
+
+A tuple is ideal for three reasons.  First, tuples are immutable, forcing the user to reinstantiate a point object.  This provides a layer of protection as one must understand the data format thoroughly.  Second, a list of tuples provides faster positional lookup and iteration than a list of lists. Finally, the OGC standard notation, when access via the geospatial data abstraction library, stores coordinate pairs in a pseudo-tuple. 
+
+Polylines and polygons are composed of multiple points, vertices.  Each vertex of a poly-geometry is represented as an individual point, and a collection of these points is stored in a list.  Lists provide the ability to retain point order individual vertices by index.  For example, one can access the third vertex of a poly geometry by calling \texttt{poly-geometry[2]}.  Table 1, below, shows the geometry representation in pythonic notation along with the textual description of each dat structure.
+
+I therefore have implemented a Point base class.  This is a factory that accepts either a user defined coordinate pair (\emph{x,y}) or, if supplied with no variables, randomly generates a coordinate pair between a hard-coded range.  This class is then subclassed by a Poly class that handles the generation of polylines and polygons.  Polylines and polygons differ only in that the latter requires the first and final vertex to be identical.  The Poly class therefore has two largely identical methods.  \texttt{createPolyline} accepts either an integer, of random points to be generated, or a list of coordinates.  \texttt{createPolygon} accepts identical arguments and forces the first and final vertex to be identical.  This is accomplished by appending the list of coordinates with the initial coordinate.
+
+\begin{table}[ht]
+\caption{Examples of Geometry Representation}
+\centering
+\begin{tabular}{l c c }
+\hline\hline
+Geometry & Representation & Python Data Structure \\[0.5ex]
+%heading
+\hline
+Point & (5,2) & tuple\\
+Polyline & [(1,2), (3,4), (5,6)] & list of tuples\\
+Polygon & [(9,8), (7,6), (5,4), (9,8)] & list of tuples\\
+\hline
+\end{tabular}
+\label{table:representation}
+\end{table}
+
+\end{document}  
