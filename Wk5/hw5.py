@@ -45,14 +45,14 @@ can = Canvas(root, width=vmax, height=umax)
 
 
 colors = ['red','green','blue','yellow','orange','purple']
-#for line in geometries:
-    #line = line.tolist()
-    #print line
-    #color = choice(colors)
-    #can.create_line(line, fill=color)
+for line in geometries:
+    line = line.tolist()
+    print line
+    color = choice(colors)
+    can.create_line(line, fill=color)
 can.create_line(500,50,498,50,fill='red')
 
 can.pack()
 
-root.mainloop()   
+#root.mainloop()   
 
