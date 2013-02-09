@@ -1,0 +1,200 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{listings} % For source code
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in 
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+   
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Assignment\ \#5} % Assignment title
+\newcommand{\hmwkClass}{GPH\ 573} % Course/class
+\newcommand{\hmwkAuthorName}{Jay Laura} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+}
+\author{\textbf{\hmwkAuthorName}}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\begin{homeworkProblem}
+
+For this assignment we were required to read in a text file containing 1024 Polylines in some coordinate system and visualize them using TKinter.  Each polyline is defined by $n$ comma separated vertices.  Simply, we open the input text file in read mode, create an empty list into which we will load numpy arrays and iterate through the input lines.  This implementation utilizes regular expressions, available via the \texttt{regex} module.  While the python documentation and numerous technical books provide a more in depth presentation of writing and using regular expressions, the following describes this particular implementation.\\
+
+
+We utilize \lstinline[basicstyle=\ttfamily]{re.findall(r"[-+]?\d*\.\d+|\d+",line)}, to find all instances of floating point numbers in a line.  \texttt{r} indicates that the notation is in raw form.  This is necessary to keep the line suscinct.  Without alerting python that raw input is being used it would be necessary to pepper the line with '\texttt{\textbackslash} escape characters.  We then utilize \texttt{[ ]} to indicate that we are generating a set and \texttt{-+} to indicate that the set will be greedy, that is it will repeat through the line.  \texttt{?} then indicates that the previous greedy extraction will repeat only once, i.e. we will extract all numbers prior to a decimal point only once.  \texttt{\textbackslash d} locates a decimal digit, \texttt{*}, matches this $n$ times, \texttt{.} checks all character, \texttt{+} is greedy, and \texttt{|} indicates that we test all branches until a match occurs.  For example, when examining a line, we iteratively add a character until either we have extracted a single floating point number without additional text, or we hit a line end.  The \texttt{find all} function then iterates over the line again, discounting those floating points numbers it has already identified.
+
+Note that we pack the individual polylines, as \texttt{bumpy} arrays, into a list.  This is inefficient and we would be better served trying to pack each polyline into an array of arrays.  Since \texttt{numpy} does not support ragged arrays, this would require that we find the total length of the longest polyline and generate a matrix with dimensions len(polyline) by len(longest polyline).  We could pack null vertices with \texttt{NaN} or \texttt{np.infinity}  
+
+\begin{lstlisting}[frame=single, label=Read Text,caption=Code to read floating point coordinates from a text file using regular expressions]
+f = open(sys.argv[1])
+geometries = []
+for line in f:
+    fl = re.findall(r"[-+]?\d*\.\d+|\d+",line)
+    fl =  fl[1:]
+    float_pts = [float(x) for x in fl]
+    float_arr = np.asarray(float_pts)
+    if float_pts:
+        geometries.append(float_arr)
+\end{lstlisting}
+ 
+Next we setup to perform a geotransform to convert from coordinate space to monitor space.  The key to this code snippet is the use of fancy indexing.  This is why I chose to pack the coordinates into \texttt{numpy} lists.  We are able to iterate over ever other coordinate, i.e. either the x or y coordinate by indicating that we start at index 0 or index 1 and touch every other coordinate.  \texttt{[0::2]} indicates that the code will iterate from index 0 to the final index in twos.  \texttt{[1::2]} indicates that the code iterates in twos, starting at the first index. 
+\vspace{10pt}
+\begin{lstlisting}[frame=single, label=Read Text,caption=Code to compute scaling values (minimum and maximum coordinate values)]
+#Geotransform
+xmax = None
+ymax = None
+xmin = float('inf')
+ymin = float('inf')
+for geometry in geometries:
+    if geometry[0::2].max() > xmax:
+        xmax = geometry[0::2].max()
+    if geometry[0::2].min() < xmin:
+        xmin = geometry[0::2].min()
+    if geometry[1::2].max() > ymax:
+        ymax = geometry[1::2].max()
+    if geometry[1::2].min() < ymin:
+        ymin = geometry[1::2].min()
+\end{lstlisting}
+
+We then compute the scaling ratio to convert between coordinate space and monitor space.  It is possible to detect the monitor extent or allow the user to supply the desired screen dimensions.  The implementation is robust enough that hard coded values can be replaced with variables.
+
+\begin{lstlisting}[frame=single,label=Read Text,caption=Code to compute scaling values (minimum and maximum coordinate values)]
+umax = 800
+vmax = 600
+ratioX = (umax - 0)/(xmax-xmin)
+ratioY = (vmax - 0)/(ymax-ymin)
+ratio = min(ratioX, ratioY)
+\end{lstlisting}
+
+Here we apply the scaling factor to each polyline.  Again this uses \texttt{numpy} fancy indexing and vectorized computation to avoid the use of nested for loops.  This implementation is significantly more efficient.
+
+\begin{lstlisting}[frame=single,label=Read Text,caption=Code to scale each coordinate]
+for line in geometries:
+    line[0::2] = ratio * (line[0::2] - xmin)
+    line[1::2] = vmax + ((-1 * ratio) * (line[1::2] - ymin))
+\end{lstlisting}
+
+Finally, we visualize the data in a TK window.  Note that it is necessary to unpack the \texttt{numpy} array into a list for visualization.  We also have provided the option to visualize in various colors using the \texttt{choice} function in the \texttt{random} module.
+
+\begin{lstlisting}[frame=single,label=Read Text,caption=Code to visualize the polylines]
+#TK window    
+root = Tk()
+can = Canvas(root, width=umax, height=vmax)
+colors = ['red']#,'green','blue','yellow','orange','purple']
+for line in geometries:
+    line = line.tolist()
+    color = choice(colors)
+    color ==  'black'
+    can.create_line(line, fill=color)
+can.pack()
+root.mainloop()  
+\end{lstlisting}
+
+\end{homeworkProblem}
+
+\end{document}

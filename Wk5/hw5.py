@@ -20,39 +20,43 @@ for line in f:
 #Geotransform
 xmax = None
 ymax = None
+xmin = float('inf')
+ymin = float('inf')
 for geometry in geometries:
     if geometry[0::2].max() > xmax:
         xmax = geometry[0::2].max()
+    if geometry[0::2].min() < xmin:
+        xmin = geometry[0::2].min()
     if geometry[1::2].max() > ymax:
-        ymax = geometry[0::2].max()
-
+        ymax = geometry[1::2].max()
+    if geometry[1::2].min() < ymin:
+        ymin = geometry[1::2].min()
+#print xmax,xmin,ymax,ymin
 
 umax = 800
 vmax = 600
-ratioX = umax / xmax
-ratioY = vmax / ymax
+ratioX = (umax - 0)/(xmax-xmin)
+ratioY = (vmax - 0)/(ymax-ymin)
 ratio = min(ratioX, ratioY)
-
+#print ratio
     
 for line in geometries:
-    #line[::2] *= ratio
-    #line[1::2] *= -ratio
-    line *= ratio
-    
+    line[0::2] = ratio * (line[0::2] - xmin)
+    line[1::2] = vmax + ((-1 * ratio) * (line[1::2] - ymin))
+
 #TK window    
 root = Tk()
-can = Canvas(root, width=vmax, height=umax)
+can = Canvas(root, width=umax, height=vmax)
 
 
-colors = ['red','green','blue','yellow','orange','purple']
+colors = ['red']#,'green','blue','yellow','orange','purple']
 for line in geometries:
     line = line.tolist()
-    print line
     color = choice(colors)
+    color ==  'black'
     can.create_line(line, fill=color)
-can.create_line(500,50,498,50,fill='red')
 
 can.pack()
 
-#root.mainloop()   
+root.mainloop()   
 
