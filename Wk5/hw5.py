@@ -22,6 +22,7 @@ xmax = None
 ymax = None
 xmin = float('inf')
 ymin = float('inf')
+
 for geometry in geometries:
     if geometry[0::2].max() > xmax:
         xmax = geometry[0::2].max()
@@ -49,11 +50,10 @@ root = Tk()
 can = Canvas(root, width=umax, height=vmax)
 
 
-colors = ['red']#,'green','blue','yellow','orange','purple']
+colors = ['red','green','blue','yellow','orange','purple']
 for line in geometries:
     line = line.tolist()
     color = choice(colors)
-    color ==  'black'
     can.create_line(line, fill=color)
 
 can.pack()

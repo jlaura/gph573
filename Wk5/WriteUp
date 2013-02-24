@@ -25,6 +25,7 @@
 \usepackage{lastpage} % Required to determine the last page for the footer
 \usepackage{extramarks} % Required for headers and footers
 \usepackage{graphicx} % Required to insert images
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
 \usepackage{listings} % For source code
 
@@ -48,7 +49,7 @@
 \renewcommand\headrulewidth{0.4pt} % Size of the header rule
 \renewcommand\footrulewidth{0.4pt} % Size of the footer rule
 
-\setlength\parindent{0pt} % Removes all indentation from paragraphs
+%\setlength\parindent{5pt} % Removes all indentation from paragraphs
 
 %----------------------------------------------------------------------------------------
 %	DOCUMENT STRUCTURE COMMANDS
@@ -123,12 +124,16 @@
 
 \begin{homeworkProblem}
 
-For this assignment we were required to read in a text file containing 1024 Polylines in some coordinate system and visualize them using TKinter.  Each polyline is defined by $n$ comma separated vertices.  Simply, we open the input text file in read mode, create an empty list into which we will load numpy arrays and iterate through the input lines.  This implementation utilizes regular expressions, available via the \texttt{regex} module.  While the python documentation and numerous technical books provide a more in depth presentation of writing and using regular expressions, the following describes this particular implementation.\\
+For this assignment we were required to read a text file containing 1024 Polylines in some coordinate system and visualize them using \texttt{TKinter}.  Each polyline is defined by $n$ vertices in the format 
+\begin{equation}
+(x_{a},y_{a}, x_{a+1}, y_{a+1}, x_{a+2}, y_{a+2}, . . . x_{a+m}, y_{a+m})  
+\end{equation}
 
+For this implementation I open the input text file in read mode, create an empty list into which we will load \texttt{NumPy} arrays and iterate through the input lines, reading the polyline vertces as an array.  This implementation utilizes regular expressions, available via the \texttt{regex} module.  While the python documentation and numerous technical books provide a more in depth presentation of writing and using regular expressions, the following describes this particular implementation.
 
-We utilize \lstinline[basicstyle=\ttfamily]{re.findall(r"[-+]?\d*\.\d+|\d+",line)}, to find all instances of floating point numbers in a line.  \texttt{r} indicates that the notation is in raw form.  This is necessary to keep the line suscinct.  Without alerting python that raw input is being used it would be necessary to pepper the line with '\texttt{\textbackslash} escape characters.  We then utilize \texttt{[ ]} to indicate that we are generating a set and \texttt{-+} to indicate that the set will be greedy, that is it will repeat through the line.  \texttt{?} then indicates that the previous greedy extraction will repeat only once, i.e. we will extract all numbers prior to a decimal point only once.  \texttt{\textbackslash d} locates a decimal digit, \texttt{*}, matches this $n$ times, \texttt{.} checks all character, \texttt{+} is greedy, and \texttt{|} indicates that we test all branches until a match occurs.  For example, when examining a line, we iteratively add a character until either we have extracted a single floating point number without additional text, or we hit a line end.  The \texttt{find all} function then iterates over the line again, discounting those floating points numbers it has already identified.
+I utilize \lstinline[basicstyle=\ttfamily]{re.findall(r"[-+]?\d*\.\d+|\d+",line)}, to find all instances of floating point numbers in a line.  \texttt{r} indicates that the notation is in raw form.  This is necessary to keep the line succinct.  Without alerting Python that raw input is being used it would be necessary to pepper the line with '\texttt{\textbackslash} escape characters.  We then utilize \texttt{[ ]} to indicate that we are generating a set and \texttt{-+} to indicate that the set will be greedy, that is it will repeat through the line.  \texttt{?} then indicates that the previous greedy extraction will repeat only once, i.e. we will extract all numbers prior to a decimal point only once.  \texttt{\textbackslash d} locates a decimal digit, \texttt{*}, matches this $n$ times, \texttt{.} checks all characters, \texttt{+} is greedy, and \texttt{|} indicates that we test all branches until a match occurs.  For example, when examining a line, we iteratively add a character until either we have extracted a single floating point number without additional text, or we hit a line end.  The \texttt{findall} function then iterates over the line again, discounting those floating points numbers it has already identified.
 
-Note that we pack the individual polylines, as \texttt{bumpy} arrays, into a list.  This is inefficient and we would be better served trying to pack each polyline into an array of arrays.  Since \texttt{numpy} does not support ragged arrays, this would require that we find the total length of the longest polyline and generate a matrix with dimensions len(polyline) by len(longest polyline).  We could pack null vertices with \texttt{NaN} or \texttt{np.infinity}  
+Note that we pack the individual polylines, as \texttt{NumPy} arrays, into a list.  This is inefficient and we would be better served trying to pack each polyline into an array of arrays.  Since \texttt{NumPy} does not support ragged arrays, this would require that we find the total length of the longest polyline and generate a matrix with dimensions len(polyline) by len(longest polyline).  We could pack null vertices with \texttt{NaN} or \texttt{np.infinity}.  This section of code is implemented as:  
 
 \begin{lstlisting}[frame=single, label=Read Text,caption=Code to read floating point coordinates from a text file using regular expressions]
 f = open(sys.argv[1])
@@ -142,8 +147,8 @@ for line in f:
         geometries.append(float_arr)
 \end{lstlisting}
  
-Next we setup to perform a geotransform to convert from coordinate space to monitor space.  The key to this code snippet is the use of fancy indexing.  This is why I chose to pack the coordinates into \texttt{numpy} lists.  We are able to iterate over ever other coordinate, i.e. either the x or y coordinate by indicating that we start at index 0 or index 1 and touch every other coordinate.  \texttt{[0::2]} indicates that the code will iterate from index 0 to the final index in twos.  \texttt{[1::2]} indicates that the code iterates in twos, starting at the first index. 
-\vspace{10pt}
+Next we setup to perform a geotransformation to convert from coordinate space to monitor space.  The key to this code snippet is the use of fancy indexing.  This is why I choose to pack the coordinates into \texttt{NumPy} arrays.  We are able to iterate over ever other coordinate, i.e. either the $x$ or $y$ coordinate by indicating that we start at index 0 or index 1 and touch every other coordinate.  \texttt{[0::2]} indicates that the code will iterate from index 0 to the final index in twos.  \texttt{[1::2]} indicates that the code iterates in twos, starting at the first index.  This is implemented as:
+
 \begin{lstlisting}[frame=single, label=Read Text,caption=Code to compute scaling values (minimum and maximum coordinate values)]
 #Geotransform
 xmax = None
@@ -161,7 +166,7 @@ for geometry in geometries:
         ymin = geometry[1::2].min()
 \end{lstlisting}
 
-We then compute the scaling ratio to convert between coordinate space and monitor space.  It is possible to detect the monitor extent or allow the user to supply the desired screen dimensions.  The implementation is robust enough that hard coded values can be replaced with variables.
+We then compute the scaling ratio to convert between coordinate space and monitor space.  It is possible to detect the monitor extent or allow the user to supply the desired screen dimensions.  The implementation is robust enough that hard coded values can be replaced with variables.  This is implemented as:
 
 \begin{lstlisting}[frame=single,label=Read Text,caption=Code to compute scaling values (minimum and maximum coordinate values)]
 umax = 800
@@ -171,7 +176,7 @@ ratioY = (vmax - 0)/(ymax-ymin)
 ratio = min(ratioX, ratioY)
 \end{lstlisting}
 
-Here we apply the scaling factor to each polyline.  Again this uses \texttt{numpy} fancy indexing and vectorized computation to avoid the use of nested for loops.  This implementation is significantly more efficient.
+Here we apply the scaling factor to each polyline.  Again this uses \texttt{NumPy} fancy indexing and vectorized computation to avoid the use of nested \texttt{for} loops.  This implementation is significantly more efficient and is implemented as:
 
 \begin{lstlisting}[frame=single,label=Read Text,caption=Code to scale each coordinate]
 for line in geometries:
@@ -179,7 +184,7 @@ for line in geometries:
     line[1::2] = vmax + ((-1 * ratio) * (line[1::2] - ymin))
 \end{lstlisting}
 
-Finally, we visualize the data in a TK window.  Note that it is necessary to unpack the \texttt{numpy} array into a list for visualization.  We also have provided the option to visualize in various colors using the \texttt{choice} function in the \texttt{random} module.
+Finally, we visualize the data in a TK window.  Note that it is necessary to unpack the \texttt{NumPy} array into a list for visualization.  We also have provided the option to visualize in various colors using the \texttt{choice} function in the \texttt{random} module.  This is implemented as:
 
 \begin{lstlisting}[frame=single,label=Read Text,caption=Code to visualize the polylines]
 #TK window    
@@ -196,5 +201,14 @@ root.mainloop()
 \end{lstlisting}
 
 \end{homeworkProblem}
+
+\begin{figure}
+\centering
+\includegraphics[width=130mm]{output_red.png}
+\caption{Script output in the default color.}
+\includegraphics[width=130mm]{output_multi.png}
+\caption{Script output with each polyline randomly colored.}
+\end{figure}
+
 
 \end{document}
