@@ -26,7 +26,6 @@ ratio = min(ratioX, ratioY)
 feature = layer.GetNextFeature()
 #Get the geometry type - this way we can view any type of shapefile
 geom_type = feature.GetGeometryRef().GetGeometryType()
-
 if geom_type == 1: #This is a point
         points = []
         while feature:
@@ -70,6 +69,43 @@ if geom_type == 3: #This is a polygon
                         out_ring.append(y)
                 polygon.append(out_ring)
                 feature = layer.GetNextFeature()
+                
+if geom_type == 6: #This is a multipolygon
+        multipolygons = []
+        while feature:
+                geom = feature.GetGeometryRef()
+                num_rings = geom.GetGeometryCount()
+                multipoly = []
+                for r in range(num_rings):
+                        out_ring = []
+                        ring = geom.GetGeometryRef(r)
+                        geom_name = ring.GetGeometryName()
+                        if geom_name == 'POLYGON':
+                                polygon = []
+                                poly = ring.GetGeometryRef(0)
+                                outring = []
+                                vertices = poly.GetPointCount()
+                                for vertex in range(vertices):
+                                        x, y, z = poly.GetPoint(vertex)
+                                        x = ((ratio * (x - xmin))) * .95 + 10
+                                        y = (vmax + ((-1 * ratio) * (y - ymin))) * 0.95 + 10
+                                        out_ring.append(x)
+                                        out_ring.append(y)
+                                polygon.append(out_ring)
+                        
+                        elif geom_name == 'LINEARRING':
+                                out_ring = []
+                                vertices = ring.GetPointCount()
+                                for vertex in range(vertices):
+                                        x, y, z = ring.GetPoint(vertex)
+                                        x = ((ratio * (x - xmin))) * .95 + 10
+                                        y = (vmax + ((-1 * ratio) * (y - ymin))) * 0.95 + 10
+                                        out_ring.append(x)
+                                        out_ring.append(y)
+                        multipoly.append(polygon)
+                        multipoly.append(out_ring)
+                multipolygons.append(multipoly)
+                feature = layer.GetNextFeature()
 
 #TK window    
 root = Tk()
@@ -85,7 +121,13 @@ if geom_type == 2:
 if geom_type == 3:
         for poly in polygon:
                 can.create_polygon(poly, fill='green', outline='black')
-
+else:
+        print "The Tk Canvas object does not support complex multi-part polygons."
+        for multipoly in multipolygons:
+                print multipoly
+                for ring in multipoly:
+                        print ring
+                        can.create_polygon(ring, fill='red', outline='black')        
 #Pack the canvas
 can.pack()
 

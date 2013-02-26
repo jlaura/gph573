@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  23 FEB 2013 19:45
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  26 FEB 2013 11:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -305,19 +305,53 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[2] [3] (./WriteUp.aux) )
+<chicago.png, id=11, 810.02625pt x 630.355pt>
+File: chicago.png Graphic file (type png)
+ <use chicago.png>
+Package pdftex.def Info: chicago.png used on input line 50.
+(pdftex.def)             Requested size: 341.43306pt x 265.69951pt.
+
+<line.png, id=13, 812.03375pt x 622.325pt>
+File: line.png Graphic file (type png)
+ <use line.png>
+Package pdftex.def Info: line.png used on input line 55.
+(pdftex.def)             Requested size: 341.43306pt x 261.65959pt.
+
+<point.png, id=14, 812.03375pt x 632.3625pt>
+File: point.png Graphic file (type png)
+ <use point.png>
+Package pdftex.def Info: point.png used on input line 60.
+(pdftex.def)             Requested size: 341.43306pt x 265.87991pt.
+
+<schools.png, id=15, 813.0375pt x 631.35875pt>
+File: schools.png Graphic file (type png)
+ <use schools.png>
+Package pdftex.def Info: schools.png used on input line 65.
+(pdftex.def)             Requested size: 341.43306pt x 265.13033pt.
+
+<multipoly.png, id=16, 576.1525pt x 630.355pt>
+File: multipoly.png Graphic file (type png)
+ <use multipoly.png>
+Package pdftex.def Info: multipoly.png used on input line 70.
+(pdftex.def)             Requested size: 341.43306pt x 373.5702pt.
+ [2] [3 <./chicago.png>] [4 <./line.png>] [5 <./point.png>] [6 <./schools.png>]
+ [7 <./multipoly.png>] (./WriteUp.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 18 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 3354 strings out of 493488
- 44081 string characters out of 3141326
- 106104 words of memory out of 3000000
- 6458 multiletter control sequences out of 15000+200000
+ 3381 strings out of 493488
+ 44448 string characters out of 3141326
+ 108104 words of memory out of 3000000
+ 6480 multiletter control sequences out of 15000+200000
  11255 words of font info for 44 fonts, out of 3000000 for 9000
  1118 hyphenation exceptions out of 8191
- 42i,7n,26p,763b,254s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,7n,31p,763b,287s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmcsc10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/
@@ -325,10 +359,10 @@ cm/cmr10.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmr8.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 r9.pfb></usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt1
 0.pfb>
-Output written on WriteUp.pdf (3 pages, 74054 bytes).
+Output written on WriteUp.pdf (7 pages, 162495 bytes).
 PDF statistics:
- 38 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 37 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

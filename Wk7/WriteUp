@@ -16,15 +16,15 @@
 \begin{document}
 \maketitle
 \doublespace
-For this assignment we were required to open and visualize a shapefile.  My implementation makes use of the GeoSpatial Data Abstraction Library's (GDAL) OGR Simple Feature Library.  This library is written in C++ and wrapped in a number of high level languages, including Python.  With OGR it is possible to read and a myriad of vector formats, access geometry attributes via the attribute table, and reproject using OSR, a spatial reference library.  Finally, OGR provides simple functions to convert between many OGC formats including WKT, WKB, KML, KMZ, GML, and geoJSON.
+For this assignment we were required to open and visualize a shapefile.  My implementation makes use of the GeoSpatial Data Abstraction Library's (GDAL) OGR Simple Feature Library.  This library is written in C++ and wrapped in a number of high level languages, including Python, using SWIG.  With OGR it is possible to read and write a myriad of vector formats, access geometry attributes via the attribute table, and re-project using OSR, a spatial reference library.  Finally, OGR provides simple functions to convert between many OGC formats including WKT, WKB, KML, KMZ, GML, and geoJSON.
 
-For this implementation I utilize argparse to simplify argument parsing.  This is a Python 2.7+ module that replaces the old OptParse module.  I utilize argparse for most complex command-line tools as it provides a straightforward tool to automatically generate command line accessible help documentation and packs arguments into a easily passable \texttt{dict}.  Argparse also handles complex argument chains with easy, allowing for more complex options to be deployed.  This program utilizes argparse only to store the input data set, e.g. the shapefile.
+For this implementation I utilize \texttt{argparse} to simplify argument parsing.  This is a Python 2.7+ module that replaces the old \texttt{opt parse} module.  I utilize \texttt{argparse} for most complex command-line tools as it provides a readable and rapidly developable library to automatically generate command line accessible help documentation.  \texttt{Argparse} also packs arguments into a easily passable \texttt{dict}.  Finally, Argparse handles complex argument chains with easy, allowing for conditional or variable length options to be employed.  This program utilizes \texttt{argparse} only to store the input data set, e.g. the shapefile.
 
-Instead of having to read the header and binary within the different components of a shapefile, OGR wraps that functionality in the \texttt{ogr.Open} function.  If one were to print the returned value it would be a SWIG shadow and memory address.  This is because the underlying C++ libraries are wrapped in SWIG.  
+Instead of having to read the header and binary within the different components of a shapefile, OGR wraps that functionality in the \texttt{ogr.Open} function.  If one were to print the returned value it would be a SWIG shadow and memory address.  We are able to access specific components of the shapefile by byte offset using built-in functions, i.e. we let OGR parse the binary and handle the offsets.
 
-Once the program has a handle to the shapefile we access the first layer.  It is assumed that these shapefiles have a single layer, with a single geometry type as they confirm to the ESRI standard.  It is possible that a shapefile, generated with OGR, could have multiple layers with divergent geometry types.  I have never seen this in practice, but the capability does exist.  Access to the layer essentially provides access the shapefile metadata and attribute table.  In contrast to the previous homework assignment where we had to dynamically compute the minimum and maximum values for each axis, it is possible to simply query the extent of the shapefile.  From this, the program computes the conversion ratio from coordinate space to pixel space.
+Once the program has a handle to the shapefile we access the first layer.  It is assumed that these shapefiles have a single layer, with a single geometry type as they conform to the ESRI standard.  It is possible that a shapefile, generated with OGR, could have multiple layers with divergent geometry types.  I have never seen this in practice, but the capability does exist.  Access to the layer essentially provides access the shapefile metadata and attribute table.  In contrast to the previous homework assignment where we had to dynamically compute the minimum and maximum values for each axis, it is possible to simply query the extent of the shapefile.  From this, the program computes the conversion ratio from coordinate space to pixel space.
 
-To allow for the code to be more robust, the program queries the first row of the shapefile and returns the geometry type code.  I parse the type code because different geometries are composed of different numbers of elements.  For example, a point is simply a pair of coordinates, while a polygon is a ring, composed of pairs of coordinates.  To access the points within a polygon, one must first access the ring.  This software does not support complex geometries, but could be easily extended using simply Python flow controls.  For example, by querying the number of rings that compose a polygon, it is possible to work with complex shapes (donuts) and multi-geometries.
+To allow for the code to be more robust, the program queries the first row of the shapefile and returns the geometry type code.  I parse the type code because different geometries are composed of different numbers of elements.  For example, a point is simply a pair of coordinates, while a polygon is a ring, composed of pairs of coordinates.  To access the points within a polygon, one must first access the ring.  This software supports points, lines, polygons, and multi polygons.  It also makes use of the OGR geometry type codes and name codes.  These can be used interchangeably.
 
 Once parsed, the program accesses each point and performs the necessary coordinate to pixel space conversions.  Note that the data is scaled to 95\% total size and offset 10 pixels from the origin.  This is because the \texttt{Tk.Canvas} object casts all \texttt{float} numbers to \texttt{int}.  This causes geometries near the boundaries to be drawn on the boundary, i.e. converted points with values less than 1 are set to 0.  This loss of precision alters the output geometry by clipping the edges.  While scaling is not ideal, it does provide a easily implemented work around.
 
@@ -43,7 +43,34 @@ Geometry Code & Geometry Name \\
 \end{tabular}
 \end{table}
 
-%\section{}
+\section{Screen Captures}
+What  follows are a selection of screen captures for each of the sample data sets.
+
+\begin{figure}
+\includegraphics[width=120mm]{chicago.png}
+\caption{Chicago}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=120mm]{line.png}
+\caption{Line geometries}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=120mm]{point.png}
+\caption{Point Geometries}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=120mm]{schools.png}
+\caption{Schools}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=120mm]{multipoly}
+\caption{MultiPolygons}
+\end{figure}
+
 %\subsection{}
 
 
